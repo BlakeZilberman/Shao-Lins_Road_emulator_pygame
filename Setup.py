@@ -1,3 +1,9 @@
+import pygame, sys
+from pygame.locals import *
+
+pygame.init()
+DISPLAYSURF = pygame.display.set_mode((800, 800))
+
 pygame.display.set_caption("Shao Lin's Road")
 heroImg = pygame.image.load('Assets/hero.png')
 heroImg = pygame.transform.scale(heroImg, (200, 200))
@@ -12,10 +18,13 @@ red = (255, 0, 0)
 
 heroX = 650
 heroY = 550 
-enemyX = 400
-enemyY = 400
+enemyX = 375
+enemyY = 265
 enemyImg = pygame.image.load('Assets/enemy.png')
-enemyImg = pygame.transform.scale(heroImg, (200, 200))
+enemyImg = pygame.transform.scale(enemyImg, (200, 200))
+enemykickImg = pygame.image.load('Assets/enemykick.png')
+enemykickImg = pygame.transform.scale(enemykickImg, (200, 200))
+
 kicking = False
 colour = (255, 10, 15)
 
@@ -36,29 +45,39 @@ textRect = text.get_rect()
 # set the center of the rectangular object. 
 textRect.center = (200 , 100) 
 
-
+speed = 9.5
 
 while True: # main game loop
 
-  
+  # -- draw 
     DISPLAYSURF.blit(bg, (0, 0))
-
     DISPLAYSURF.blit(text, textRect)
-
- 
-
     keys = pygame.key.get_pressed()
 
-    if keys[pygame.K_LEFT] and heroX > -50: 
-        heroX -= 10
+    #Enemy logic
+    
+
+    enemyX = enemyX + speed
+
+    DISPLAYSURF.blit(enemyImg, (enemyX, enemyY))
+
+    if (enemyX <= -10):
+        speed = 9.5
+        
+    if (enemyX >= 650):
+        speed = -9.5
+
+    if (speed == 9.5):
+        DISPLAYSURF.blit(enemykickImg, (enemyX, enemyY))
 
 
     
 
+ # Game controls 
+    if keys[pygame.K_LEFT] and heroX > -50: 
+        heroX -= 10
     if keys[pygame.K_RIGHT] and heroX < 650:
         heroX += 10
-        
-
     if keys[pygame.K_SPACE]:
         kicking = True
         DISPLAYSURF.blit(herokickImg, (heroX, heroY))       
